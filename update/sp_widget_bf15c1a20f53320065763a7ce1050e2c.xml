@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function() {
+  /* widget controller */
+  var c = this;
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>update_set_review</id>
+        <internal>false</internal>
+        <link/>
+        <name>Update Set Review</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+var updateSetId = $sp.getParameter('sys_id');
+	updateSetId='80c648360f97320065763a7ce1050ec7';
+	var security = new CodeReviewSecurityUtil();
+	data.permission = security.canAccessUpdateSetReviewPage(updateSetId);
+	var updateSetGr = new GlideRecord('sys_update_set');
+	updateSetGr.get(updateSetId);
+	data.updateSet = {
+		name: {'value' :updateSetGr.getDisplayValue('name'),'label':'Name'},
+		description: {'value':updateSetGr.getDisplayValue('description'),'label':'Description'},
+		state: {'value':updateSetGr.getDisplayValue('state'),'label':'State'},
+		application: {'value':updateSetGr.getDisplayValue('application'),'label':'Application'},
+		sys_created_on: {'value':updateSetGr.getDisplayValue('sys_created_on'),'label':'Created On'},
+		sys_created_by: {'value':updateSetGr.getDisplayValue('sys_created_by'),'label':'Created By'},
+		release_date: {'value':updateSetGr.getDisplayValue('release_date'),'label':'Release Date'}
+	};
+	data.fields = [];
+	for(var key in data.updateSet) {
+		if(data.updateSet.hasOwnProperty(key)){
+			var field = updateSetGr.getDisplayValue(key);
+			if(field) {
+				data.fields.push(key);
+			}
+		}
+	}
+	data.customUpdatesArr=[];
+	var custUpdates = new GlideRecord('sys_update_xml');
+	custUpdates.addQuery('update_set',updateSetId);
+	custUpdates.orderByDesc('sys_updated_on');
+	custUpdates.setLimit(10);
+	custUpdates.query();
+	
+	while(custUpdates.next()){
+		var obj = {
+			'sys_id':{'value' :custUpdates.getDisplayValue('sys_id'),'label':'Sys Id'},
+			'action':{'value' :custUpdates.getDisplayValue('action'),'label':'Action'},
+			'application':{'value' :custUpdates.getDisplayValue('application'),'label':'Application'},
+			'category':{'value' :custUpdates.getDisplayValue('category'),'label':'Category'},
+			'name':{'value' :custUpdates.getDisplayValue('name'),'label':'Name'},
+			'sys_created_by':{'value' :custUpdates.getDisplayValue('sys_created_by'),'label':'Created By'},
+			'sys_created_on':{'value' :custUpdates.getDisplayValue('sys_created_on'),'label':'Created On'},
+			'sys_mod_count':{'value' :custUpdates.getDisplayValue('sys_mod_count'),'label':'Mod Count'},
+			'sys_updated_by':{'value' :custUpdates.getDisplayValue('sys_updated_by'),'label':'Updated By'},
+			'sys_updated_on':{'value' :custUpdates.getDisplayValue('sys_updated_on'),'label':'Updated On'},
+			'target_name':{'value' :custUpdates.getDisplayValue('target_name'),'label':'Target Name'},
+			'type':{'value' :custUpdates.getDisplayValue('type'),'label':'Type'},
+			'update_set':{'value' :custUpdates.getDisplayValue('update_set'),'label':'Update Set'}
+		};
+		data.customUpdatesArr.push(obj);
+	}
+	
+	data.comments=[];
+	var commentsGr = new GlideRecord('x_64008_gerritnow_customer_update_reviewer_comments');
+	commentsGr.addQuery('update_set',updateSetId);
+	commentsGr.orderBy('sys_updated_on');
+	commentsGr.setLimit(10);
+	commentsGr.query();
+	
+	while(commentsGr.next()){
+		var commentsObj = {
+			'sys_id':{'value' :commentsGr.getDisplayValue('sys_id'),'label':'Sys Id'},
+			'comments':{'value' :commentsGr.getDisplayValue('comments'),'label':'Comments'},
+			'customer_update':{'value' :commentsGr.getDisplayValue('customer_update'),'label':'Customer Update'},
+			'starting_line_number':{'value' :commentsGr.getDisplayValue('starting_line_number'),'label':'Starting Line Number'},
+			'starting_column_number':{'value' :commentsGr.getDisplayValue('starting_column_number'),'label':'Starting Colum Number'},
+			'sys_created_by':{'value' :commentsGr.getDisplayValue('sys_created_by'),'label':'Commented By'},
+			'sys_created_on':{'value' :commentsGr.getDisplayValue('sys_created_on'),'label':'Commented On'},
+			'ending_line_number':{'value' :commentsGr.getDisplayValue('ending_line_number'),'label':'Ending Line Number'},
+			'ending_column_number':{'value' :commentsGr.getDisplayValue('ending_column_number'),'label':'Ending Column Number'},
+			'sys_updated_on':{'value' :commentsGr.getDisplayValue('sys_updated_on'),'label':'Updated On'},
+			'sys_updated_by':{'value' :commentsGr.getDisplayValue('sys_updated_by'),'label':'Updated by'},
+			'update_set':{'value' :commentsGr.getDisplayValue('update_set'),'label':'Update Set'}
+		};
+		data.comments.push(commentsObj);
+	}
+	
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-06-14 18:53:34</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>bf15c1a20f53320065763a7ce1050e2c</sys_id>
+        <sys_mod_count>66</sys_mod_count>
+        <sys_name>Update Set Review</sys_name>
+        <sys_package display_value="GerritNow" source="x_64008_gerritnow">d7a834220f13320065763a7ce1050e66</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="GerritNow">d7a834220f13320065763a7ce1050e66</sys_scope>
+        <sys_update_name>sp_widget_bf15c1a20f53320065763a7ce1050e2c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-06-15 17:47:03</sys_updated_on>
+        <template><![CDATA[<div id="update-set-review">
+    <div class="container">
+        <div ng-if="::data.permission !=true"><br><br> You do not have permissions to review this update set :
+            <b>{{::data.updateSet.name.value}}</b>
+        </div>
+        <div ng-if="::data.permission ==true">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <h1>Update set Details</h1>
+
+
+
+                    <table class="table">
+                        <tbody>
+
+                            <tr ng-repeat="field in data.fields">
+                                <th class="col-md-4">{{::data.updateSet[field].label}}</th>
+                                <td class="col-md-8">: {{::data.updateSet[field].value}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <h1>Update Set reviewers</h1>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="text-center">
+                      Customer Updates</h1>
+                    <div class="col-sm-12" style="overflow:auto;">
+                        <table class="table table-striped" width="100%">
+
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2">Name</th>
+                                    <th class="col-md-1">Action</th>
+                                    <th class="col-md-1">Type</th>
+                                    <th class="col-md-2">Target Name</th>
+                                    <th class="col-md-1">Application</th>
+                                    <th class="col-md-1">Updated By</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="cusUpdate in data.customUpdatesArr">
+                                    <td class="col-md-2"><a href="https://dev28191.service-now.com/sp/?id=update_set_file_review&file_sys_id={{::cusUpdate.sys_id.value}}">{{::cusUpdate.name.value}}</a></td>
+                                    <td class="col-md-1">{{::cusUpdate.action.value}}</td>
+                                    <td class="col-md-1">{{::cusUpdate.type.value}}</td>
+                                    <td class="col-md-2">{{::cusUpdate.target_name.value}}</td>
+                                    <td class="col-md-1">{{::cusUpdate.application.value}}</td>
+                                    <td class="col-md-1">{{::cusUpdate.sys_updated_by.value}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="text-center">
+                      Comments</h1>
+                    <div class="col-sm-12" style="overflow:auto;">
+                        <table class="table table-striped" width="100%">
+
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2">Commented By</th>
+                                  <th class="col-md-1">Commented on</th>
+                                    <th class="col-md-2">Comment</th>
+                                    <th class="col-md-1">Customer Update</th>
+                                    <th class="col-md-1">Starting line No</th>
+                                    <th class="col-md-1">Starting column No</th>
+                                    <th class="col-md-1">Ending line No</th>
+                                    <th class="col-md-1">Ending column No</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="comment in data.comments">
+                                    <td class="col-md-2">{{::comment.sys_created_by.value}}</td>
+                                    <td class="col-md-1">{{::comment.sys_created_on.value}}</td>
+                                  <td class="col-md-1">{{::comment.comments.value}}</td>
+                                    <td class="col-md-1">{{::comment.customer_update.value}}</td>
+                                    <td class="col-md-1">{{::comment.starting_line_number.value}}</td>
+                                    <td class="col-md-1">{{::comment.starting_column_number.value}}</td>
+                                    <td class="col-md-1">{{::comment.ending_line_number.value}}</td>
+                                    <td class="col-md-1">{{::comment.ending_column_number.value}}</td>
+                         
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

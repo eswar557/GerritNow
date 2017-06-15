@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description>uiCodemirrorDirective</description>
+        <global>false</global>
+        <name>x_64008_gerritnow.uiCodemirrorDirective</name>
+        <script><![CDATA['use strict';
+
+/**
+ * Binds a CodeMirror widget to a <textarea> element.
+ */
+angular.module('ui.codemirror', [])
+  .constant('uiCodemirrorConfig', {})
+  .directive('uiCodemirror', function uiCodemirrorDirective(uiCodemirrorConfig) {
+
+  return {
+    restrict: 'EA',
+    require: '?ngModel',
+    compile: function compile() {
+
+      // Require CodeMirror
+      if (angular.isUndefined(window.CodeMirror)) {
+        throw new Error('ui-codemirror needs CodeMirror to work... (o rly?)');
+      }
+
+      return postLink;
+    }
+  };
+
+  function postLink(scope, iElement, iAttrs, ngModel) {
+
+    var codemirrorOptions = angular.extend(
+      { value: iElement.text() },
+      uiCodemirrorConfig.codemirror || {},
+      scope.$eval(iAttrs.uiCodemirror),
+      scope.$eval(iAttrs.uiCodemirrorOpts)
+    );
+
+    var codemirror = newCodemirrorEditor(iElement, codemirrorOptions);
+
+    configOptionsWatcher(
+      codemirror,
+      iAttrs.uiCodemirror || iAttrs.uiCodemirrorOpts,
+      scope
+    );
+
+    configNgModelLink(codemirror, ngModel, scope);
+
+    configUiRefreshAttribute(codemirror, iAttrs.uiRefresh, scope);
+
+    // Allow access to the CodeMirror instance through a broadcasted event
+    // eg: $broadcast('CodeMirror', function(cm){...});
+    scope.$on('CodeMirror', function(event, callback) {
+      if (angular.isFunction(callback)) {
+        callback(codemirror);
+      } else {
+        throw new Error('the CodeMirror event requires a callback function');
+      }
+    });
+
+    // onLoad callback
+    if (angular.isFunction(codemirrorOptions.onLoad)) {
+      codemirrorOptions.onLoad(codemirror);
+    }
+  }
+
+  function newCodemirrorEditor(iElement, codemirrorOptions) {
+    var codemirrot;
+
+    if (iElement[0].tagName === 'TEXTAREA') {
+      // Might bug but still ...
+      codemirrot = window.CodeMirror.fromTextArea(iElement[0], codemirrorOptions);
+    } else {
+      iElement.html('');
+      codemirrot = new window.CodeMirror(function(cm_el) {
+        iElement.append(cm_el);
+      }, codemirrorOptions);
+    }
+
+    return codemirrot;
+  }
+
+  function configOptionsWatcher(codemirrot, uiCodemirrorAttr, scope) {
+    if (!uiCodemirrorAttr) { return; }
+
+    var codemirrorDefaultsKeys = Object.keys(window.CodeMirror.defaults);
+    scope.$watch(uiCodemirrorAttr, updateOptions, true);
+    function updateOptions(newValues, oldValue) {
+      if (!angular.isObject(newValues)) { return; }
+      codemirrorDefaultsKeys.forEach(function(key) {
+        if (newValues.hasOwnProperty(key)) {
+
+          if (oldValue && newValues[key] === oldValue[key]) {
+            return;
+          }
+
+          codemirrot.setOption(key, newValues[key]);
+        }
+      });
+    }
+  }
+
+  function configNgModelLink(codemirror, ngModel, scope) {
+    if (!ngModel) { return; }
+    // CodeMirror expects a string, so make sure it gets one.
+    // This does not change the model.
+    ngModel.$formatters.push(function(value) {
+      if (angular.isUndefined(value) || value === null) {
+        return '';
+      } else if (angular.isObject(value) || angular.isArray(value)) {
+        throw new Error('ui-codemirror cannot use an object or an array as a model');
+      }
+      return value;
+    });
+
+
+    // Override the ngModelController $render method, which is what gets called when the model is updated.
+    // This takes care of the synchronizing the codeMirror element with the underlying model, in the case that it is changed by something else.
+    ngModel.$render = function() {
+      //Code mirror expects a string so make sure it gets one
+      //Although the formatter have already done this, it can be possible that another formatter returns undefined (for example the required directive)
+      var safeViewValue = ngModel.$viewValue || '';
+      codemirror.setValue(safeViewValue);
+    };
+
+
+    // Keep the ngModel in sync with changes from CodeMirror
+    codemirror.on('change', function(instance) {
+      var newValue = instance.getValue();
+      if (newValue !== ngModel.$viewValue) {
+        scope.$evalAsync(function() {
+          ngModel.$setViewValue(newValue);
+        });
+      }
+    });
+  }
+
+  function configUiRefreshAttribute(codeMirror, uiRefreshAttr, scope) {
+    if (!uiRefreshAttr) { return; }
+
+    scope.$watch(uiRefreshAttr, function(newVal, oldVal) {
+      // Skip the initial watch firing
+      if (newVal !== oldVal) {
+        setTimeout(function() {
+          codeMirror.refresh();
+        });
+      }
+    });
+  }
+
+});]]></script>
+        <script_name>uiCodemirrorDirective</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-06-15 13:47:31</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a2b74d3e0f1b320065763a7ce1050ebd</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>x_64008_gerritnow.uiCodemirrorDirective</sys_name>
+        <sys_package display_value="GerritNow" source="x_64008_gerritnow">d7a834220f13320065763a7ce1050e66</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="GerritNow">d7a834220f13320065763a7ce1050e66</sys_scope>
+        <sys_update_name>sys_ui_script_a2b74d3e0f1b320065763a7ce1050ebd</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-06-15 14:17:43</sys_updated_on>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <sp_dependency display_value="ui.codemirror">fb9ca57e0f5b320065763a7ce1050ef7</sp_dependency>
+        <sp_js_include display_value="/scripts/libs/sp_codemirror_includes.js">438fd9255b301200e39fc7ad31f91a62</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-06-15 16:25:12</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>94cce5be0f5b320065763a7ce1050eda</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>codemirror./scripts/libs/sp_codemirror_includes.js</sys_name>
+        <sys_package display_value="GerritNow" source="x_64008_gerritnow">d7a834220f13320065763a7ce1050e66</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="GerritNow">d7a834220f13320065763a7ce1050e66</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_94cce5be0f5b320065763a7ce1050eda</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-06-15 16:25:12</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+</record_update>

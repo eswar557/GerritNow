@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Customer Update Reviewer Comments" max_length="40" name="x_64008_gerritnow_customer_update_reviewer_comments" type="collection">
+        <element label="Comments" max_length="1000" name="comments" type="string"/>
+        <element label="Customer Update" max_length="32" name="customer_update" reference="sys_update_xml" type="reference"/>
+        <element label="Ending Column Number" max_length="40" name="ending_column_number" type="integer"/>
+        <element label="Ending Line Number" max_length="40" name="ending_line_number" type="integer"/>
+        <element label="Mod Count" max_length="40" name="mod_count" type="integer"/>
+        <element label="Starting Column Number" max_length="40" name="starting_column_number" type="integer"/>
+        <element label="Starting Line Number" max_length="40" name="starting_line_number" type="integer"/>
+        <element label="Update Set" max_length="32" name="update_set" reference="sys_update_set" type="reference"/>
+        <index name="index">
+            <element name="customer_update"/>
+        </index>
+        <index name="index2">
+            <element name="update_set"/>
+        </index>
+    </element>
+</database>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Customer Update Reviewer Points" max_length="40" name="x_64008_gerritnow_customer_update_reviewer_points" type="collection">
+        <element label="Comments" max_length="1000" name="comments" type="string"/>
+        <element choice="3" default="0" label="Points" mandatory="true" max_length="40" name="points" type="integer">
+            <choice>
+                <element label="2" sequence="1" value="2"/>
+                <element label="1" sequence="2" value="1"/>
+                <element label="0" sequence="3" value="0"/>
+                <element label="-1" sequence="4" value="-1"/>
+                <element label="-2" sequence="5" value="-2"/>
+            </choice>
+        </element>
+        <element label="Reviewer" mandatory="true" max_length="32" name="reviewer" reference="sys_user" type="reference"/>
+        <element label="Update Set" mandatory="true" max_length="32" name="update_set" reference="sys_update_set" type="reference"/>
+        <index name="index">
+            <element name="reviewer"/>
+        </index>
+        <index name="index2">
+            <element name="update_set"/>
+        </index>
+    </element>
+</database>

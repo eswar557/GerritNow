@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function() {  /* widget controller */  var c = this;}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.flex-row {
+	display: flex;
+	flex-wrap: wrap;
+}
+.flex-row &gt; [class*='col-'] {
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-row .thumbnail,
+.flex-row .caption {
+	flex-direction: column;
+	display: flex;
+	flex: 1 0 auto;
+	height: auto;
+	position: relative;
+}
+.flex-text {
+	flex-grow: 1;
+}
+.flex-row img {
+	min-width: 0;
+	width: 100%;
+}
+.text-overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>update_set</id>
+        <internal>false</internal>
+        <link/>
+        <name>Update Set</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	var updateSet = new GlideRecord("sys_update_set");
+	updateSet.addActiveQuery();
+	//updateSet.addQuery('state', 'complete');
+	updateSet.query();
+	data.availableUpdatesSets = [];
+	while(updateSet.next()){
+		data.availableUpdatesSets.push({
+			name: updateSet.getDisplayValue(),
+			sys_id: $sp.getField(updateSet, 'sys_id').value,
+			created: $sp.getField(updateSet, 'sys_created_on').value,
+			description: $sp.getField(updateSet, 'description').value
+		});
+	}
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-06-14 18:09:34</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>930b782e0f13320065763a7ce1050eab</sys_id>
+        <sys_mod_count>25</sys_mod_count>
+        <sys_name>Update Set</sys_name>
+        <sys_package display_value="GerritNow" source="x_64008_gerritnow">d7a834220f13320065763a7ce1050e66</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="GerritNow">d7a834220f13320065763a7ce1050e66</sys_scope>
+        <sys_update_name>sp_widget_930b782e0f13320065763a7ce1050eab</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-06-15 08:08:35</sys_updated_on>
+        <template><![CDATA[<div id="update_set">
+	<div class="panel panel-default">
+       <div class="panel-body">
+  <div class="page-header">
+    <h1>Updates sets</h1>
+  </div>
+			<div class="flex-row row">
+        <div class="col-xs-6 col-sm-4 col-lg-4" ng-repeat="updateSet in data.availableUpdatesSets">
+          <div class="thumbnail">
+            <div class="caption">
+              <h4 ng-bind="::updateSet.name" class="text-overflow-ellipsis"></h4>
+              <p class="flex-text text-muted" ng-bind="::updateSet.description">
+              </p>
+              <p><a class="btn btn-primary" href="?id=update_set_review&sys_id={{::updateSet.sys_id}}">Review</a></p>
+            </div>
+            <!-- /.caption -->
+          </div>
+          <!-- /.thumbnail -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

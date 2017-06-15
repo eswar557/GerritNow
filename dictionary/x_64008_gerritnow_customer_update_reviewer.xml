@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Customer Update Reviewer" max_length="40" name="x_64008_gerritnow_customer_update_reviewer" type="collection">
+        <element label="Comments" max_length="1000" name="comments" type="string"/>
+        <element label="Reviewers (Groups)" max_length="4000" name="reviewers_groups" reference="sys_user_group" type="glide_list"/>
+        <element label="Reviewers (Users)" max_length="4000" name="reviewers_users" reference="sys_user" type="glide_list"/>
+        <element label="Update Set" mandatory="true" max_length="32" name="update_set" reference="sys_update_set" type="reference"/>
+        <index name="index">
+            <element name="update_set"/>
+        </index>
+    </element>
+</database>
